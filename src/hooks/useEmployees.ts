@@ -11,16 +11,19 @@ export const useEmployees = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const teams = Array.from(new Set(employees.map((e) => e.team)));
 
-  const filteredEmployees = employees.filter(
+  const filteredEmployees = useMemo(() => employees.filter(
     (emp) =>
-      emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.team.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+      (filterTeam === "all" || emp.team === filterTeam) &&
+      (
+        emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        emp.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        emp.team.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+  ), [employees, filterTeam, searchTerm]);
 
   const { nodes, edges } = useMemo(
-    () => buildTree(employees, filterTeam === "all" ? undefined : filterTeam),
-    [employees, filterTeam]
+    () => buildTree(filteredEmployees),
+    [filteredEmployees]
   );
 
   const refetch = useCallback(async () => {

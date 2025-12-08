@@ -24,7 +24,7 @@ const edgeTypes = {
 };
 
 function App() {
-  const { nodes, edges, employees, loading } = useEmployees();
+  const { nodes, edges, employees, loading, filterTeam, setFilterTeam, searchTerm, setSearchTerm, teams } = useEmployees();
 
   const [reactFlowNodes, setReactFlowNodes, onNodesChange] =
     useNodesState([]);
@@ -56,7 +56,14 @@ function App() {
     <div className="App">
       <div className="dashboard">
         <Controls showFitView={false} showInteractive={false} showZoom={false}>
-          <LeftPanel employeeData={employees} />
+          <LeftPanel 
+            employeeData={employees} 
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            filterTeam={filterTeam}
+            setFilterTeam={setFilterTeam}
+            teams={teams}
+          />
         </Controls>
         <div
           className="flow-container"
