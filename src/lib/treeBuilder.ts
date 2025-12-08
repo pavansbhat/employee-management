@@ -5,17 +5,12 @@ import dagre from "@dagrejs/dagre";
 
 const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
-const nodeWidth = 800;
-const nodeHeight = 500;
+const nodeWidth = 1000;
+const nodeHeight = 850;
 
-export const buildTree = (employees: Employee[], filterTeam?: string) => {
+export const buildTree = (employees: Employee[]) => {
   const nodeMap = new Map<string, Node>();
   const edges: Edge[] = [];
-
-  // const filteredEmployees =
-  //   filterTeam === "all"
-  //     ? employees
-  //     : employees.filter((emp) => emp.team === filterTeam);
 
   employees.forEach((emp) => {
     nodeMap.set(emp.id, {
@@ -28,6 +23,7 @@ export const buildTree = (employees: Employee[], filterTeam?: string) => {
         team: emp.team,
       },
       position: { x: 0, y: 0 },
+      className: "nopan"
     });
   });
 

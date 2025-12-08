@@ -11,19 +11,21 @@ export const useEmployees = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const teams = Array.from(new Set(employees.map((e) => e.team)));
 
-  const filteredEmployees = useMemo(() => employees.filter(
-    (emp) =>
-      (filterTeam === "all" || emp.team === filterTeam) &&
-      (
-        emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        emp.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        emp.team.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-  ), [employees, filterTeam, searchTerm]);
+  const filteredEmployees = useMemo(
+    () =>
+      employees.filter(
+        (emp) =>
+          (filterTeam === "all" || emp.team === filterTeam) &&
+          (emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emp.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emp.team.toLowerCase().includes(searchTerm.toLowerCase())),
+      ),
+    [employees, filterTeam, searchTerm],
+  );
 
   const { nodes, edges } = useMemo(
     () => buildTree(filteredEmployees),
-    [filteredEmployees]
+    [filteredEmployees],
   );
 
   const refetch = useCallback(async () => {
@@ -43,13 +45,33 @@ export const useEmployees = () => {
     employeeId: string,
     newManagerId: string | null,
   ) => {
-    // TODO: Implement update API endpoint
-    // For now, just update the local state
-    setEmployees((prev) =>
-      prev.map((e) =>
-        e.id === employeeId ? { ...e, manager: newManagerId } : e,
-      ),
-    );
+    try {
+      const response = await fetch(`/api/employees/${employeeId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          manager: newManagerId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update manager");
+      }
+
+      setEmployees((prev) =>
+        prev.map((e) =>
+          e.id === employeeId ? { ...e, manager: newManagerId } : e,
+        ),
+      );
+
+      await refetch();
+    } catch (error) {
+      console.error("Failed to update manager:", error);
+      throw error;
+    }
   };
 
   useEffect(() => {

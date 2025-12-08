@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import '@xyflow/react/dist/style.css';
+import "@xyflow/react/dist/style.css";
 import { Controls } from "@xyflow/react";
 import "./App.css";
 import { LeftPanel } from "./components/left-panel/LeftPanel.tsx";
@@ -8,56 +8,66 @@ import {
   Background,
   useNodesState,
   useEdgesState,
-  MiniMap
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useEmployees } from "./hooks/useEmployees";
 import { CustomNode } from "./components/Node/CustomNode.tsx";
 import ButtonEdge from "./components/ButtonEdge/ButtonEdge.tsx";
 
-const nodeTypes = {
-  custom: CustomNode,
-};
-
 const edgeTypes = {
-	buttonedge: ButtonEdge,
+  buttonedge: ButtonEdge,
 };
 
 function App() {
-  const { nodes, edges, employees, loading, filterTeam, setFilterTeam, searchTerm, setSearchTerm, teams } = useEmployees();
+  const {
+    nodes,
+    edges,
+    employees,
+    loading,
+    filterTeam,
+    setFilterTeam,
+    searchTerm,
+    setSearchTerm,
+    teams,
+    updateManager,
+  } = useEmployees();
 
-  const [reactFlowNodes, setReactFlowNodes, onNodesChange] =
-    useNodesState([]);
-  const [reactFlowEdges, setReactFlowEdges, onEdgesChange] =
-    useEdgesState([]);
+  const handleDrop = async (
+    draggedEmployeeId: string,
+    targetEmployeeId: string,
+  ) => {
+    await updateManager(draggedEmployeeId, targetEmployeeId);
+  };
+
+  const nodeTypes = {
+    custom: (props: any) => <CustomNode {...props} onDrop={handleDrop} />,
+  };
+
+  const [reactFlowNodes, setReactFlowNodes, onNodesChange] = useNodesState(
+    [] as any[],
+  );
+  const [reactFlowEdges, setReactFlowEdges, onEdgesChange] = useEdgesState(
+    [] as any[],
+  );
 
   useEffect(() => {
-    console.log('Setting nodes:', nodes);
     setReactFlowNodes(nodes);
   }, [nodes]);
 
   useEffect(() => {
-    console.log('Setting edges:', edges);
     setReactFlowEdges(edges);
   }, [edges]);
-
-  console.log('App - nodes:', nodes);
-  console.log('App - reactFlowNodes:', reactFlowNodes);
-  console.log('App - edges:', edges);
-  console.log('App - employees:', employees);
-  console.log('App - nodeTypes:', nodeTypes);
 
   if (loading) {
     return <span>Loading...</span>;
   }
 
-
   return (
     <div className="App">
       <div className="dashboard">
         <Controls showFitView={false} showInteractive={false} showZoom={false}>
-          <LeftPanel 
-            employeeData={employees} 
+          <LeftPanel
+            employeeData={employees}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             filterTeam={filterTeam}
@@ -77,12 +87,17 @@ function App() {
             fitView
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
-				onlyRenderVisibleElements={true}
-                nodesDraggable={false}
-                className="react-flow"
+            onlyRenderVisibleElements={true}
+            nodesDraggable={false}
+            className="react-flow"
           >
             <Background />
-            <Controls position={"bottom-right"} orientation="horizontal" showInteractive={false}  style={{color: "#ccc"}}/>
+            <Controls
+              position={"bottom-right"}
+              orientation="horizontal"
+              showInteractive={false}
+              style={{ color: "#ccc" }}
+            />
           </ReactFlow>
         </div>
       </div>

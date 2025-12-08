@@ -1,5 +1,3 @@
-// import { useState } from 'react';
-import { employees } from "../../mocks/data/employee.ts";
 import type {Employee} from "../../zod-schema/schema.ts";
 import "./employeeCard.css"
 

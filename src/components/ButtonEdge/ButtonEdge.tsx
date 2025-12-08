@@ -1,11 +1,10 @@
-import React from 'react';
 import {
   BaseEdge,
   EdgeLabelRenderer,
   getBezierPath,
   useReactFlow,
-  type EdgeProps
-} from '@xyflow/react';
+  type EdgeProps,
+} from "@xyflow/react";
 
 export default function CustomEdge({
   id,
