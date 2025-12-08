@@ -2,6 +2,8 @@
 
 A modern React application for visualizing and managing employee hierarchies with drag-and-drop functionality.
 
+## Note: The video walkthrough for this project is added in the root of the project. File Name - project_video_walkthrough.mov
+
 ## 🚀 Features
 
 - **Interactive Organization Chart**: Visualize employee reporting structure in a tree-like format
