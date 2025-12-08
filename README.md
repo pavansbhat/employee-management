@@ -2,7 +2,7 @@
 
 A modern React application for visualizing and managing employee hierarchies with drag-and-drop functionality.
 
-## Note: The video walkthrough for this project is added in the root of the project. File Name - project_video_walkthrough.mov
+## Note: The video walkthrough for this project is added in the root of the project. File Name - project_video_walkthrough.mov which is a git lfs file. You should download this to watch the video walkthrough of the project. I had to use the git lfs to upload this video since the video file is of 183 MB file size.
 
 ## 🚀 Features
 
